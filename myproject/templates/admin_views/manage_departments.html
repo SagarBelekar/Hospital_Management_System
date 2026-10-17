@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+            <!-- Header with Title and Add Button -->
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-diagram-3-fill fs-4 text-primary me-2"></i>
+                    <div>
+                        <h5 class="mb-0 fw-bold text-dark">Hospital Departments</h5>
+                        <small class="text-muted">Manage clinical divisions and specializations</small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                        {{ departments.count }} Total
+                    </span>
+                    <!-- Add Department Button (Triggers Modal) -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+                        <i class="bi bi-plus-circle me-1"></i> Add Department
+                    </button>
+                </div>
+            </div>
+
+            <!-- Department List Table -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-secondary small text-uppercase">
+                            <tr>
+                                <th style="width: 25%;">Department Name</th>
+                                <th style="width: 55%;">Description</th>
+                                <th style="width: 20%;" class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dept in departments %}
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-dark">{{ dept.name }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-secondary small">{{ dept.description|default:"No description provided." }}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'edit_department' dept.id %}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a href="{% url 'delete_department' dept.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this department?');" title="Delete">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-5 text-muted">
+                                    <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
+                                    No departments created yet. Click "+ Add Department" to create one.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Department Modal (Opens on Button Click) -->
+<div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="addDepartmentModalLabel">
+                    <i class="bi bi-plus-circle me-2"></i>Add New Department
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Department Name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        {{ form.description }}
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">Save Department</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

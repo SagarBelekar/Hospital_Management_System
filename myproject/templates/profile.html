@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center py-2">
+    <div class="col-11 col-sm-9 col-md-7 col-lg-5">
+        <div class="card shadow border-0 rounded-4 overflow-hidden">
+            
+            <!-- Profile Header Banner -->
+            <div class="card-header bg-primary text-white p-3 text-center">
+                <div class="d-inline-flex p-2 bg-white text-primary rounded-circle shadow-sm mb-1">
+                    {% if user.is_staff %}
+                        <i class="bi bi-shield-lock-fill fs-3"></i>
+                    {% else %}
+                        <i class="bi bi-person-fill fs-3"></i>
+                    {% endif %}
+                </div>
+                <h5 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h5>
+                <span class="badge bg-light text-dark px-2 py-1 rounded-pill fw-semibold small">
+                    {{ role }}
+                </span>
+            </div>
+
+            <div class="card-body p-3 bg-white">
+                
+                {% if user.is_staff %}
+                    <!-- ADMIN PROFILE DETAILS -->
+                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-2">
+                        <i class="bi bi-person-badge me-2"></i>Administrator Credentials
+                    </h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Username</label>
+                            <div class="form-control form-control-sm bg-light">{{ user.username }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Email Address</label>
+                            <div class="form-control form-control-sm bg-light">{{ user.email|default:"Not specified" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Staff Access</label>
+                            <div class="form-control form-control-sm bg-light text-success fw-bold">Active / Superuser</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Account Created</label>
+                            <div class="form-control form-control-sm bg-light">{{ user.date_joined|date:"M d, Y" }}</div>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-2">
+                        <i class="bi bi-bar-chart-fill me-2"></i>System Oversight
+                    </h6>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-6">
+                            <div class="p-2 bg-light rounded-3 text-center border">
+                                <h4 class="fw-bold text-dark mb-0">{{ total_doctors }}</h4>
+                                <small class="text-muted small">Total Doctors</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div class="p-2 bg-light rounded-3 text-center border">
+                                <h4 class="fw-bold text-dark mb-0">{{ total_patients }}</h4>
+                                <small class="text-muted small">Total Patients</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-primary btn-sm px-3 py-1">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                {% else %}
+                    <!-- PATIENT PROFILE DETAILS -->
+                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-2">
+                        <i class="bi bi-card-heading me-2"></i>Personal & Medical Information
+                    </h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Username</label>
+                            <div class="form-control form-control-sm bg-light">{{ user.username }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Email</label>
+                            <div class="form-control form-control-sm bg-light">{{ user.email|default:"Not specified" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Phone Number</label>
+                            <div class="form-control form-control-sm bg-light">{{ patient.phone|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Blood Group</label>
+                            <div class="form-control form-control-sm bg-light fw-bold text-danger">{{ patient.blood_group|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Gender</label>
+                            <div class="form-control form-control-sm bg-light">{{ patient.get_gender_display|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold text-secondary small">Date of Birth</label>
+                            <div class="form-control form-control-sm bg-light">{{ patient.dob|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="fw-semibold text-secondary small">Residential Address</label>
+                            <div class="form-control form-control-sm bg-light">{{ patient.address|default:"N/A" }}</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="fw-semibold text-secondary small">Emergency Contact Number</label>
+                            <div class="form-control form-control-sm bg-light">{{ patient.emergency_contact|default:"N/A" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded-3 text-center border">
+                                <h4 class="fw-bold text-primary mb-0">{{ appointments_count }}</h4>
+                                <small class="text-muted small">Total Consultations</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded-3 text-center border">
+                                <h4 class="fw-bold text-success mb-0">{{ bills_count }}</h4>
+                                <small class="text-muted small">Bills Recorded</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{% url 'patient_dashboard' %}" class="btn btn-outline-primary btn-sm px-3 py-1">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                        </a>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

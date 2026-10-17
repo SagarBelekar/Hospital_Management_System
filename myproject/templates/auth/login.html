@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* 1. Aapki wahi original image - Bina kisi blur ya heavy overlay ke, bilkul clear */
+    body {
+        min-height: 100vh;
+        background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=2200&q=95') center/cover no-repeat fixed !important;
+        overflow-x: hidden;
+    }
+
+    /* Screen height wrapper for natural center positioning */
+    .login-fullscreen-wrapper {
+        min-height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1rem;
+    }
+
+    /* 2. Wider & Attractive Frosted Glass Card */
+    .premium-wide-card {
+        max-width: 560px; /* Card ki width badha di gayi hai */
+        width: 100%;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.3),
+                    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+                    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+
+    .premium-wide-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 32px 70px -15px rgba(15, 23, 42, 0.38),
+                    0 12px 30px -5px rgba(13, 110, 253, 0.18);
+    }
+
+    /* Brand Icon with Medical Glow */
+    .brand-icon-wrapper {
+        position: relative;
+        display: inline-flex;
+    }
+
+    .brand-icon-wrapper::before {
+        content: '';
+        position: absolute;
+        inset: -5px;
+        background: linear-gradient(135deg, #0dcaf0, #0d6efd);
+        border-radius: 50%;
+        opacity: 0.35;
+        filter: blur(8px);
+    }
+
+    .brand-icon-box {
+        width: 66px;
+        height: 66px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0284c7 100%);
+        color: #ffffff;
+        border-radius: 50%;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 8px 18px rgba(13, 110, 253, 0.3);
+    }
+
+    /* Clean, spacious form inputs */
+    .custom-input {
+        background: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        font-weight: 500;
+        border-radius: 0.9rem !important;
+        height: calc(3.5rem + 2px) !important;
+        transition: all 0.22s ease-in-out;
+    }
+
+    .custom-input:focus {
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.18) !important;
+    }
+
+    .form-floating > .custom-input + label {
+        color: #64748b !important;
+        padding-left: 1.25rem;
+    }
+
+    .form-floating > .custom-input:focus ~ label,
+    .form-floating > .custom-input:not(:placeholder-shown) ~ label {
+        color: #0d6efd !important;
+        font-weight: 600;
+        padding-left: 1.25rem;
+    }
+
+    /* Password show/hide toggle */
+    .password-toggle-btn {
+        cursor: pointer;
+        z-index: 10;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        padding: 0.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .password-toggle-btn:hover {
+        color: #0d6efd;
+    }
+
+    /* Vibrant Gradient Action Button */
+    .btn-gradient-glow {
+        background: linear-gradient(135deg, #0d6efd 0%, #0088cc 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 0.9rem;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.28);
+    }
+
+    .btn-gradient-glow:hover {
+        background: linear-gradient(135deg, #0b5ed7 0%, #0077b6 100%);
+        box-shadow: 0 12px 26px rgba(13, 110, 253, 0.38);
+        transform: translateY(-2px);
+        color: #ffffff;
+    }
+
+    .btn-gradient-glow:active {
+        transform: scale(0.99);
+    }
+</style>
+
+<div class="login-fullscreen-wrapper">
+    <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 d-flex justify-content-center">
+        
+        <div class="card premium-wide-card border-0 p-4 p-md-5">
+            <div class="card-body p-0">
+                
+                <!-- Hospital Brand Header -->
+                <div class="text-center mb-4 pb-2">
+                    <div class="brand-icon-wrapper mb-3">
+                        <div class="d-inline-flex align-items-center justify-content-center brand-icon-box">
+                            <i class="bi bi-hospital fs-2"></i>
+                        </div>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Welcome Back</h2>
+                    <p class="text-secondary small mb-0">Login to access your hospital account</p>
+                </div>
+
+                <!-- Error Alert Box -->
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center rounded-3 p-3 small mb-4 shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-circle-fill flex-shrink-0 me-2 fs-5"></i>
+                    <div>Invalid username or password. Please try again.</div>
+                    <button type="button" class="btn-close ms-auto p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <!-- Form -->
+                <form method="post" novalidate id="loginForm">
+                    {% csrf_token %}
+                    
+                    <!-- Username Input Group -->
+                    <div class="form-floating mb-3">
+                        <input type="text" name="username" class="form-control custom-input px-4" id="id_username" placeholder="Enter username" required autofocus autocomplete="username">
+                        <label for="id_username" class="d-flex align-items-center gap-2">
+                            <i class="bi bi-person"></i>Username
+                        </label>
+                    </div>
+
+                    <!-- Password with Toggle Group -->
+                    <div class="position-relative mb-3">
+                        <div class="form-floating">
+                            <input type="password" name="password" class="form-control custom-input px-4 pe-5" id="id_password" placeholder="Password" required autocomplete="current-password">
+                            <label for="id_password" class="d-flex align-items-center gap-2">
+                                <i class="bi bi-shield-lock"></i>Password
+                            </label>
+                        </div>
+                        <button type="button" class="password-toggle-btn position-absolute top-50 end-0 translate-middle-y me-3" id="togglePasswordBtn" aria-label="Show password">
+                            <i class="bi bi-eye fs-5" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Remember Me / Forgot Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 px-1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" style="cursor: pointer;">
+                            <label class="form-check-label small text-muted" for="rememberMe" style="cursor: pointer;">Remember me</label>
+                        </div>
+                        <a href="#" class="small text-decoration-none fw-semibold text-primary">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-gradient-glow btn-lg w-100 py-3 fs-6 fw-bold d-flex align-items-center justify-content-center gap-2">
+                        <span>Login</span>
+                        <i class="bi bi-arrow-right fs-5"></i>
+                    </button>
+                </form>
+
+                <!-- Footer Sign Up Support -->
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="small text-muted mb-0">Don't have an account? 
+                        <a href="{% url 'register' %}" class="fw-bold text-decoration-none text-primary ms-1">Register here</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const passwordInput = document.getElementById('id_password');
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+    const toggleIcon = document.getElementById('togglePasswordIcon');
+
+    if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', function () {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            toggleIcon.classList.toggle('bi-eye');
+            toggleIcon.classList.toggle('bi-eye-slash');
+        });
+    }
+});
+</script>
+{% endblock %}

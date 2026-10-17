@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        min-height: 100vh;
+        background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=2200&q=95') center/cover no-repeat fixed !important;
+        overflow-x: hidden;
+    }
+    .features-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+    }
+    .feature-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        transition: transform 0.2s ease;
+    }
+    .feature-box:hover {
+        transform: translateY(-3px);
+    }
+</style>
+
+
+
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold ">System Features</h2>
+        <p class="fw-bold">Explore the end-to-end digital capabilities of our Hospital Management Platform.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="card-body">
+                    <i class="bi bi-calendar2-week fs-1 text-primary mb-3 d-block"></i>
+                    <h5 class="card-title fw-bold">Online Appointments</h5>
+                    <p class="card-text text-muted">Patients can check doctor availability by department and confirm time slots seamlessly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="card-body">
+                    <i class="bi bi-file-earmark-medical fs-1 text-success mb-3 d-block"></i>
+                    <h5 class="card-title fw-bold">Digital Records </h5>
+                    <p class="card-text text-muted">Track past consultations, symptoms and prescription history alongside verified digital billing invoices all stored securely in one timeline.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="card-body">
+                    <i class="bi bi-receipt-cutoff fs-1 text-warning mb-3 d-block"></i>
+                    <h5 class="card-title fw-bold">Automated Billing</h5>
+                    <p class="card-text text-muted">Integrated invoicing covering doctor consultation fees, pharmacy supplies, and lab charges.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

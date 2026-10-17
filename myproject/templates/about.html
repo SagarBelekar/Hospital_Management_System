@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<style>
+    body {
+        min-height: 100vh;
+        background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=2200&q=95') center/cover no-repeat fixed !important;
+        overflow-x: hidden;
+    }
+    .about-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+    }
+</style>
+
+<div class="d-flex align-items-center justify-content-center py-4" style="min-height: 75vh;">
+    <div class="col-lg-10 col-xl-9 mx-auto">
+        <div class="card shadow-sm border-0 p-4 p-md-5 rounded-4 bg-white">
+            <div class="row align-items-center g-4">
+                
+                <!-- Left Column: Details -->
+                <div class="col-md-7">
+                    <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-semibold">
+                        About CarePlus
+                    </span>
+                    <h2 class="fw-bold text-primary mb-3">Compassionate Healthcare, Powered by Tech</h2>
+                    
+                    <p class="text-muted leading-relaxed">
+                        CarePlus Hospital is a modern multi-specialty healthcare institution dedicated to delivering high-quality, compassionate medical care backed by digital clinical systems.
+                    </p>
+                    
+                    <p class="text-muted">
+                        Our platform bridges the gap between doctors, administrative staff, laboratories, and patients by streamlining consultations, record-keeping, and payment tracking.
+                    </p>
+                    
+                    <div class="row mt-4 pt-2 border-top g-3">
+                        <div class="col-6">
+                            <h3 class="fw-bold text-dark mb-0">24/7</h3>
+                            <small class="text-secondary">Emergency & Patient Care</small>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="fw-bold text-dark mb-0">100%</h3>
+                            <small class="text-secondary">Digital Health Records</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Card -->
+                <div class="col-md-5 text-center">
+                    <div class="p-4 p-lg-5 bg-light rounded-4 border">
+                        <div class="d-inline-flex p-3 bg-primary bg-opacity-10 text-primary rounded-circle mb-3">
+                            <i class="bi bi-hospital fs-1"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">Next-Gen Care</h4>
+                        <p class="text-muted small mb-0">
+                            Standardized medical workflows designed for clinical reliability and patient safety.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

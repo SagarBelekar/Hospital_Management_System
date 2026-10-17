@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-calendar2-plus me-2"></i>Book Consultation</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- 1. Department -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Department</label>
+                        {{ form.department }}
+                    </div>
+
+                    <!-- 2. Doctor -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Doctor</label>
+                        <select name="doctor" id="id_doctor" class="form-select" disabled required>
+                            <option value="">-- Please select a department first --</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. DOCTOR DETAILS (Duty Schedule & Consultation Fee) -->
+                    <div id="doctor-info-box" class="mb-3 d-none">
+                        <div class="p-3 bg-light border border-primary-subtle rounded-3">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-sm-7">
+                                    <small class="text-muted d-block text-uppercase fw-semibold" style="font-size: 0.72rem;">
+                                        <i class="bi bi-clock-history me-1 text-primary"></i>Duty Schedule
+                                    </small>
+                                    <span id="doc-schedule-val" class="fw-bold text-dark small">-</span>
+                                    <div class="text-secondary small mt-1">Specialization: <span id="doc-spec-val">-</span></div>
+                                </div>
+                                <div class="col-sm-5 text-sm-end">
+                                    <small class="text-muted d-block text-uppercase fw-semibold" style="font-size: 0.72rem;">
+                                        Consultation Fee
+                                    </small>
+                                    <span class="fs-5 fw-bold text-success">₹<span id="doc-fee-val">0.00</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Date & Preferred Time -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Date</label>
+                            {{ form.appointment_date }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Preferred Time</label>
+                            {{ form.appointment_time }}
+                        </div>
+                    </div>
+
+                    <!-- 5. Symptoms / Reason -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Describe Symptoms / Reason</label>
+                        {{ form.symptoms }}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">Confirm Booking</button>
+                        <a href="{% url 'patient_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deptSelect = document.getElementById('id_department');
+    const docSelect = document.getElementById('id_doctor');
+    const infoBox = document.getElementById('doctor-info-box');
+    const scheduleVal = document.getElementById('doc-schedule-val');
+    const specVal = document.getElementById('doc-spec-val');
+    const feeVal = document.getElementById('doc-fee-val');
+
+    let doctorsData = [];
+
+    // When Department changes
+    deptSelect.addEventListener('change', function () {
+        const deptId = this.value;
+        
+        docSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
+        docSelect.disabled = true;
+        infoBox.classList.add('d-none');
+        doctorsData = [];
+
+        if (!deptId) {
+            docSelect.innerHTML = '<option value="">-- Please select a department first --</option>';
+            return;
+        }
+
+        fetch(`/api/doctors-by-dept/${deptId}/`)
+            .then(res => res.json())
+            .then(data => {
+                doctorsData = data;
+                if (data.length > 0) {
+                    data.forEach(doc => {
+                        const opt = document.createElement('option');
+                        opt.value = doc.id;
+                        opt.textContent = `${doc.name} (${doc.specialization})`;
+                        docSelect.appendChild(opt);
+                    });
+                    docSelect.disabled = false;
+                } else {
+                    docSelect.innerHTML = '<option value="">No doctors available in this department</option>';
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching doctors:', err);
+                docSelect.innerHTML = '<option value="">Error fetching doctors</option>';
+            });
+    });
+
+    // When Doctor is selected
+    docSelect.addEventListener('change', function () {
+        const docId = parseInt(this.value);
+        const selected = doctorsData.find(d => d.id === docId);
+
+        if (selected) {
+            scheduleVal.textContent = selected.schedule || 'Schedule not specified';
+            specVal.textContent = selected.specialization || '-';
+            feeVal.textContent = selected.consultation_fee || '0.00';
+            infoBox.classList.remove('d-none');
+        } else {
+            infoBox.classList.add('d-none');
+        }
+    });
+});
+</script>
+{% endblock %}

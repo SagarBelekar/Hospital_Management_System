@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-success text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-shield-check me-2"></i>Pay Hospital Invoice</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-3 text-center">
+                    <span class="text-muted small">Total Payable Amount</span>
+                    <h2 class="fw-bold text-success mt-1">₹{{ bill.total_amount }}</h2>
+                </div>
+
+                <ul class="list-group list-group-flush mb-4 small">
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span>Doctor Consultation Fee:</span>
+                        <strong>₹{{ bill.consultation_fee }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span>Additional Hospital Charges:</span>
+                        <strong>₹{{ bill.additional_fee }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span>Doctor Notes:</span>
+                        <span class="text-muted text-end">{{ bill.treatment_notes|default:"None" }}</span>
+                    </li>
+                </ul>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <label class="form-label fw-semibold">Select Payment Method</label>
+                    <div class="mb-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="pay_upi" value="UPI / QR Code" checked>
+                            <label class="form-check-label" for="pay_upi"><i class="bi bi-qr-code-scan me-1 text-primary"></i> UPI / QR Code</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="pay_card" value="Debit / Credit Card">
+                            <label class="form-check-label" for="pay_card"><i class="bi bi-credit-card-2-front me-1 text-primary"></i> Debit / Credit Card</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="pay_cash" value="Cash at Counter">
+                            <label class="form-check-label" for="pay_cash"><i class="bi bi-cash me-1 text-primary"></i> Cash at Hospital Desk</label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success py-2 fw-semibold">
+                            Confirm & Complete Payment
+                        </button>
+                        <a href="{% url 'patient_pending_bills' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

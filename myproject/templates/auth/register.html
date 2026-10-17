@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Fullscreen view - No extra page scroll on standard monitors */
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=2200&q=95') center/cover no-repeat fixed !important;
+    }
+
+    /* Strict viewport fitting container */
+    .register-fullscreen-wrapper {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+    }
+
+    /* Wide & Ultra-Compact Frosted Glass Card */
+    .premium-register-card {
+        max-width: 980px; /* Wide card */
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.95);
+        border-radius: 1.25rem;
+        box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.32),
+                    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    }
+
+    /* Compact brand icon */
+    .brand-icon-box {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #0d6efd 0%, #0284c7 100%);
+        color: #ffffff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+
+    /* Compact form labels */
+    .form-label-compact {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.2rem;
+        display: block;
+    }
+
+    /* Sleek, lower-height inputs to prevent page overflow */
+    .premium-register-card input,
+    .premium-register-card select,
+    .premium-register-card textarea {
+        background: #ffffff !important;
+        border: 1.2px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        font-weight: 500;
+        border-radius: 0.65rem !important;
+        padding: 0.42rem 0.75rem !important;
+        font-size: 0.88rem !important;
+        transition: all 0.2s ease-in-out;
+        width: 100%;
+    }
+
+    .premium-register-card input:focus,
+    .premium-register-card select:focus,
+    .premium-register-card textarea:focus {
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15) !important;
+        outline: none;
+    }
+
+    /* Section divider badge */
+    .section-badge-compact {
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #0d6efd;
+        background: rgba(13, 110, 253, 0.08);
+        padding: 0.2rem 0.65rem;
+        border-radius: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Gradient Primary Submit Button */
+    .btn-gradient-glow {
+        background: linear-gradient(135deg, #0d6efd 0%, #0088cc 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px rgba(13, 110, 253, 0.25);
+    }
+
+    .btn-gradient-glow:hover {
+        background: linear-gradient(135deg, #0b5ed7 0%, #0077b6 100%);
+        box-shadow: 0 8px 18px rgba(13, 110, 253, 0.35);
+        color: #ffffff;
+    }
+</style>
+
+<div class="register-fullscreen-wrapper">
+    <div class="card premium-register-card border-0 p-3 p-md-4">
+        <div class="card-body p-0">
+            
+            <!-- Compact Header -->
+            <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="brand-icon-box">
+                        <i class="bi bi-person-plus fs-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold text-dark mb-0" style="letter-spacing: -0.02em;">Patient Registration</h4>
+                        <p class="text-secondary small mb-0">Create your CarePlus hospital patient account</p>
+                    </div>
+                </div>
+                <span class="badge bg-light text-secondary border px-3 py-2">
+                    <i class="bi bi-shield-check text-primary me-1"></i>Secure Portal
+                </span>
+            </div>
+
+            <!-- Error Alert Box -->
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show p-2 small mb-2 shadow-sm" role="alert">
+                <strong>Error:</strong> Please correct the flagged fields below.
+                <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                
+                <!-- Section 1: Account Credentials -->
+                <div class="mb-2">
+                    <div class="section-badge-compact">
+                        <i class="bi bi-shield-lock"></i> Account Credentials
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label-compact">Username <span class="text-danger">*</span></label>
+                            {{ form.username }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-compact">Password <span class="text-danger">*</span></label>
+                            {{ form.password }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Personal Details -->
+                <div class="mb-3">
+                    <div class="section-badge-compact">
+                        <i class="bi bi-person-vcard"></i> Personal Information
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-3">
+                            <label class="form-label-compact">First Name <span class="text-danger">*</span></label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label-compact">Last Name <span class="text-danger">*</span></label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label-compact">Email Address <span class="text-danger">*</span></label>
+                            {{ form.email }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label-compact">Phone Number <span class="text-danger">*</span></label>
+                            {{ form.phone }}
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <label class="form-label-compact">Gender</label>
+                            {{ form.gender }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label-compact">Date of Birth</label>
+                            {{ form.dob }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label-compact">Blood Group</label>
+                            {{ form.blood_group }}
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-md-7">
+                            <label class="form-label-compact">Residential Address</label>
+                            {{ form.address }}
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label-compact">Emergency Contact</label>
+                            {{ form.emergency_contact }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button & Login Footer in Single Flex Row -->
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                    <div class="small text-muted">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" class="fw-bold text-decoration-none text-primary ms-1">Login here</a>
+                    </div>
+                    <button type="submit" class="btn btn-gradient-glow px-4 py-2 fw-bold d-flex align-items-center gap-2">
+                        <span>Register Patient</span>
+                        <i class="bi bi-check2-circle fs-5"></i>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

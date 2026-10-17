@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        min-height: 100vh;
+        background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=2200&q=95') center/cover no-repeat fixed !important;
+        overflow-x: hidden;
+    }
+    .contact-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+    }
+    .clean-input {
+        background: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 0.75rem !important;
+    }
+</style>
+
+
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0"><i class="bi bi-envelope-paper me-2"></i>Contact Hospital Support</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-4 text-center border-end">
+                            <i class="bi bi-telephone fs-2 text-primary"></i>
+                            <h6 class="mt-2 fw-bold">Emergency Helpline</h6>
+                            <p class="text-muted small mb-0">+91 1800-CARE-PLUS</p>
+                        </div>
+                        <div class="col-md-4 text-center border-end">
+                            <i class="bi bi-envelope fs-2 text-primary"></i>
+                            <h6 class="mt-2 fw-bold">Support Email</h6>
+                            <p class="text-muted small mb-0">help@careplus-hms.com</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="bi bi-geo-alt fs-2 text-primary"></i>
+                            <h6 class="mt-2 fw-bold">Location</h6>
+                            <p class="text-muted small mb-0">Healthcare Pune, City</p>
+                        </div>
+                    </div>
+
+                    <form onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Your Name</label>
+                            <input type="text" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control" placeholder="name@example.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Subject / Query</label>
+                            <textarea class="form-control" rows="3" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2">Submit Query</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

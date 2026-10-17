@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-heart-pulse-fill me-2"></i>Patient Treatment & Billing Form</h5>
+            </div>
+            <div class="card-body p-4">
+                
+                <!-- Patient & Doctor Overview -->
+                <div class="p-3 bg-light rounded-3 mb-4 border">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Patient Details</small>
+                            <h6 class="fw-bold mb-0 text-dark">{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</h6>
+                            <small class="text-secondary">Phone: {{ appointment.patient.phone }} | Blood: {{ appointment.patient.blood_group|default:"N/A" }}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Doctor & Department</small>
+                            <h6 class="fw-bold mb-0 text-dark">{{ appointment.doctor.name }}</h6>
+                            <small class="text-secondary">{{ appointment.department.name|default:appointment.doctor.department.name }} ({{ appointment.doctor.specialization }})</small>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Reported Symptoms</small>
+                            <div class="small text-dark">{{ appointment.symptoms|default:"General consultation" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Treatment & Additional Fee Form -->
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Consultation Fee (Base)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light fw-bold">₹</span>
+                                <input type="text" class="form-control bg-light fw-bold" value="{{ consultation_fee }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Additional Fee (Medicines / Tests / Wards)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light fw-bold text-primary">₹</span>
+                                <input type="number" step="0.01" name="additional_fee" class="form-control" placeholder="0.00" value="0.00" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Doctor Treatment & Prescription Notes</label>
+                        <textarea name="treatment_notes" class="form-control" rows="4" placeholder="Enter diagnosis, medicines prescribed, or tests recommended..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'admin_treat_patients' %}" class="btn btn-outline-secondary">Back</a>
+                        <button type="submit" class="btn btn-success px-4 fw-semibold">
+                            <i class="bi bi-check2-circle me-1"></i> Complete Treatment & Generate Bill
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
